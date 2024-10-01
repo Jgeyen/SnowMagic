@@ -1,0 +1,102 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/Users/jason/workdir/github.com/jgeyen/SnowMagic/include",
+                "/Users/jason/workdir/github.com/jgeyen/SnowMagic/src",
+                "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/libdeps/uno_r4_minima/QuickPID/src",
+                "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/libdeps/uno_r4_minima/Arduino_ICM20948_DMP_Full-Function",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Wire",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/SPI",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/cores/arduino/tinyusb",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/cores/arduino",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/cores/arduino/api/deprecated",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/cores/arduino/api/deprecated-avr-comp",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/variants/MINIMA",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/AnalogWave",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Arduino_CAN/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Arduino_FreeRTOS/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Arduino_LED_Matrix/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/BlockDevices",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/EEPROM/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/FATFilesystem",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/HID",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/LittleFilesystem",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/OTAUpdate/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/RTC/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/SDU/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/SoftwareSerial/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Storage",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/WDT/src",
+                "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/WiFiS3/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/Users/jason/workdir/github.com/jgeyen/SnowMagic/include",
+                    "/Users/jason/workdir/github.com/jgeyen/SnowMagic/src",
+                    "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/libdeps/uno_r4_minima/QuickPID/src",
+                    "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/libdeps/uno_r4_minima/Arduino_ICM20948_DMP_Full-Function",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Wire",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/SPI",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/cores/arduino/tinyusb",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/cores/arduino",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/cores/arduino/api/deprecated",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/cores/arduino/api/deprecated-avr-comp",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/variants/MINIMA",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/AnalogWave",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Arduino_CAN/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Arduino_FreeRTOS/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Arduino_LED_Matrix/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/BlockDevices",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/EEPROM/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/FATFilesystem",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/HID",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/LittleFilesystem",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/OTAUpdate/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/RTC/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/SDU/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/SoftwareSerial/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/Storage",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/WDT/src",
+                    "/Users/jason/.platformio/packages/framework-arduinorenesas-uno/libraries/WiFiS3/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60116",
+                "ARDUINO_MINIMA",
+                "ARDUINO_UNOR4_MINIMA",
+                "CFG_TUSB_MCU=OPT_MCU_RAXXX",
+                "_RA_CORE=CM4",
+                "_RENESAS_RA_",
+                "ARDUINO=10810",
+                "ARDUINO_ARCH_RENESAS",
+                "ARDUINO_FSP",
+                "_XOPEN_SOURCE",
+                "F_CPU=48000000L",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "compilerPath": "/Users/jason/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc",
+            "compilerArgs": [
+                "-mcpu=cortex-m4",
+                "-mfloat-abi=hard",
+                "-mfpu=fpv4-sp-d16",
+                "-mthumb",
+                "-iprefix/Users/jason/.platformio/packages/framework-arduinorenesas-uno",
+                "@/Users/jason/.platformio/packages/framework-arduinorenesas-uno/variants/MINIMA/includes.txt",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
