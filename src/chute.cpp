@@ -8,7 +8,8 @@ Chute::Chute(){
 }
 
 float Chute::currentPosition(){
-  return ChuteYaw;
+  filteredInput = alpha * ChuteYaw + (1 - alpha) * filteredInput;
+  return filteredInput;
 }
 
 void Chute::captureTargetPosition(){

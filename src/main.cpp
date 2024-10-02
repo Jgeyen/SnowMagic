@@ -19,7 +19,7 @@ const byte numChars = 32;
 char receivedChars[numChars];
 boolean verbose = true;
 boolean newData = false;
-PIDParameters pidParams = {0.02,0,0};
+PIDParameters pidParams = {0.02,0.002,0};
 
 void recvWithEndMarker() {
     static byte ndx = 0;

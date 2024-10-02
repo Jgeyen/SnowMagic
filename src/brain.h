@@ -12,21 +12,6 @@ struct PIDParameters {
   float derivative;
 };
 
-class Brain
-{
-private:
-  bool m_isManual;
-  bool m_buttonPressLatch = false;
-  int m_buttonCount;
-  bool checkManualMode(bool);
-
-public:
-  void Initialize() ;
-  float Think(Chute &, Joystick &, LimitSwitch &, LimitSwitch &, bool, PIDParameters);
-
-
-};
-
 enum class Mode
 {
   Startup,
@@ -39,3 +24,20 @@ enum class Mode
   TraverseCCWToTP,
   Error
 };
+
+class Brain
+{
+private:
+  bool m_isManual = true;
+  bool m_buttonPressLatch = false;
+  int m_buttonCount;
+  bool checkManualMode(bool);
+  Mode DetermineMode(Mode, Chute &, Joystick &, LimitSwitch &, LimitSwitch &);
+
+public:
+  void Initialize() ;
+  float Think(Chute &, Joystick &, LimitSwitch &, LimitSwitch &, bool, PIDParameters);
+
+
+};
+
