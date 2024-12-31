@@ -27,18 +27,31 @@ void Brain::Initialize(){
 }
 
 bool shouldPrint(){
+
   if(millis() < lastPrint + 500){
-    Serial.println("don't print");
     return false;
   }
   lastPrint = millis();
   return true;
 }
+
+// int freeMemory() {
+//   extern int __heap_start, *__brkval;
+//   int v;
+//   return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
+// }
+
 void printData(bool isManualmode, Mode currentMode, float output, float joystickPosition, float targetPosition, float currentPosition, float error, bool cwLimitHit, bool ccwLimitHit)
 {
-  if(!shouldPrint){
+  if(!shouldPrint()){
     return;
   }
+  Serial.print ("t:");
+  Serial.print(static_cast<float>(millis())/1000);
+
+  // Serial.print ("mem:");
+  // Serial.print(freeMemory());
+
   Serial.print("man:");
   Serial.print(isManualmode);
 
@@ -192,14 +205,14 @@ float Brain::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, Limit
   }
 
   
-  if(verbose && shouldPrint) {
-    Serial.print("Kp:");
-    Serial.print(myPID.GetKp(), 4);
-    Serial.print("; Ki:");
-    Serial.print(myPID.GetKi(), 4);
-    Serial.print("; Kd:");
-    Serial.println(myPID.GetKd(), 4);
-  }
+  // if(verbose && shouldPrint()) {
+  //   Serial.print("Kp:");
+  //   Serial.print(myPID.GetKp(), 4);
+  //   Serial.print("; Ki:");
+  //   Serial.print(myPID.GetKi(), 4);
+  //   Serial.print("; Kd:");
+  //   Serial.println(myPID.GetKd(), 4);
+  // }
 
   Mode newMode = this->DetermineMode(currentMode, chute, joystick, cwLimit, ccwLimit);
 

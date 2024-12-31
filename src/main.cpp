@@ -78,7 +78,6 @@ void setup()
 {
   Serial.begin(115200);
   delay(1000);
-  while (!Serial)
   Serial.println("Setup starting");
 
   InitializeChuteIMU();
@@ -94,23 +93,22 @@ void setup()
   motor.Initialize();
   brain.Initialize();
 
-  
+   pinMode(A0, INPUT);
 }
 
 void loop()
 {
 
-  // MotorParams motorParams;
   float brainOutput = 0;
 
   if (ChuteIMUConnected)
   {
-    recvWithEndMarker();
-    if (newData == true) {
-      pidParams = processCommand(receivedChars);
-      newData = false;
-      verbose = true;
-    }
+    //recvWithEndMarker();
+    // if (newData == true) {
+    //   pidParams = processCommand(receivedChars);
+    //   newData = false;
+    //   verbose = true;
+    // }
     UpdateChuteIMU();
     brainOutput = brain.Think(chute, joystick, cwLimit, ccwLimit, verbose, pidParams);
   }
@@ -121,7 +119,9 @@ void loop()
   motor.SetMotorSpeed(brainOutput);
 
   // Add battery voltage sensing logic here
-
+  // Serial.print(analogRead(A0));
+  // Serial.print("; ");
+  // Serial.println(analogRead(A1));
   // Add led display logic here
   
   delay(1);
