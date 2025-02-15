@@ -16,6 +16,6 @@ private:
     void setDirection(Direction);
 
 public:
-    void Initialize();
-    void SetMotorSpeed(float);
+    void initialize();
+    void setMotorSpeed(float);
 };

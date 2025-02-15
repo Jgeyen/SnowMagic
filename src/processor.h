@@ -34,9 +34,9 @@ private:
   bool m_buttonPressLatch = false;
   int m_buttonCount;
   bool checkManualMode(bool);
-  Mode DetermineMode(Mode, Chute &, Joystick &, LimitSwitch &, LimitSwitch &);
+  Mode determineMode(Mode, Chute &, Joystick &, LimitSwitch &, LimitSwitch &);
 
 public:
-  void Initialize();
-  float Think(Chute &, Joystick &, LimitSwitch &, LimitSwitch &, bool, PIDParameters);
+  void initialize();
+  float update(Chute &, Joystick &, LimitSwitch &, LimitSwitch &, bool, PIDParameters);
 };

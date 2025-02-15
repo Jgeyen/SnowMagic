@@ -2,13 +2,13 @@
 #include "motor.h"
 #include "constants.h"
 
-void Motor::Initialize()
+void Motor::initialize()
 {
     pinMode(m_motorPin, OUTPUT);
     pinMode(m_directionPin, OUTPUT);
 }
 
-void Motor::SetMotorSpeed(float output)
+void Motor::setMotorSpeed(float output)
 {
     if (output < 0)
     {

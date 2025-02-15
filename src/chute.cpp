@@ -26,7 +26,7 @@ void Chute::captureTargetPosition()
   m_targetPosition = m_chuteIMU.yaw;
 }
 
-void Chute::Initialize()
+void Chute::initialize()
 {
   Serial.print("Initialize Chute");
   Serial.println(m_chuteIMU.yaw);

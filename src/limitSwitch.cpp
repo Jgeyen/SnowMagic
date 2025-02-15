@@ -6,7 +6,7 @@ LimitSwitch::LimitSwitch(int ioPin)
     m_pin = ioPin;
 }
 
-void LimitSwitch::Initialize()
+void LimitSwitch::initialize()
 {
     pinMode(m_pin, INPUT_PULLUP);
 }

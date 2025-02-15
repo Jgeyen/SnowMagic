@@ -1,6 +1,6 @@
 
 #include "Arduino.h"
-#include "brain.h"
+#include "processor.h"
 #include "imu.h"
 #include "constants.h"
 
@@ -17,7 +17,7 @@ float Setpoint, Input, Output;
 
 QuickPID myPID(&Input, &Output, &Setpoint);
 
-void Processor::Initialize()
+void Processor::initialize()
 {
   startingMillis = millis();
 
@@ -144,7 +144,7 @@ bool Processor::checkManualMode(bool buttonPressed)
   return m_isManual;
 }
 
-Mode Processor::DetermineMode(Mode previousMode, Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit)
+Mode Processor::determineMode(Mode previousMode, Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit)
 {
   m_isManual = true; // checkManualMode(joystick.isButtonPressed());
 
@@ -188,7 +188,7 @@ Mode Processor::DetermineMode(Mode previousMode, Chute &chute, Joystick &joystic
   return Mode::HoldPosition;
 }
 
-float Processor::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, bool verbose, PIDParameters pidParams)
+float Processor::update(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, bool verbose, PIDParameters pidParams)
 {
 
   // if(Kp != pidParams.proportional || Ki != pidParams.integral || Kd != pidParams.derivative){
@@ -208,7 +208,7 @@ float Processor::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, L
   //   Serial.println(myPID.GetKd(), 4);
   // }
 
-  Mode newMode = this->DetermineMode(currentMode, chute, joystick, cwLimit, ccwLimit);
+  Mode newMode = this->determineMode(currentMode, chute, joystick, cwLimit, ccwLimit);
 
   switch (newMode)
   {

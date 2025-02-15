@@ -18,7 +18,7 @@ private:
 
 public:
     Joystick();
-    void Initialize();
+    void initialize();
     float value();
     bool isActive();
     bool isButtonPressed();

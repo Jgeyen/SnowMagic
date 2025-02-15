@@ -13,7 +13,7 @@ private:
 
 public:
     Chute(IMU &imu);
-    void Initialize();
+    void initialize();
     void update();
     bool isPositionValid();
     float currentPosition();

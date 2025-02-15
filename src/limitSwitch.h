@@ -7,6 +7,6 @@ private:
 
 public:
     LimitSwitch(int pin);
-    void Initialize();
+    void initialize();
     bool isHit();
 };

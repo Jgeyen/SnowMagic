@@ -11,7 +11,7 @@ Joystick::Joystick()
 {
 }
 
-void Joystick::Initialize()
+void Joystick::initialize()
 {
     pinMode(m_analogPin, INPUT);
     pinMode(m_buttonPin, INPUT_PULLUP);

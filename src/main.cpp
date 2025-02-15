@@ -4,7 +4,7 @@
 #include "chute.h"
 #include "limitSwitch.h"
 #include "joystick.h"
-#include "brain.h"
+#include "processor.h"
 #include "constants.h"
 
 // Globals
@@ -26,13 +26,13 @@ void setup()
 
   chuteIMU.initialize();
 
-  ccwLimit.Initialize();
-  cwLimit.Initialize();
-  joystick.Initialize();
+  ccwLimit.initialize();
+  cwLimit.initialize();
+  joystick.initialize();
 
-  chute.Initialize();
-  motor.Initialize();
-  processor.Initialize();
+  chute.initialize();
+  motor.initialize();
+  processor.initialize();
 
   pinMode(A0, INPUT);
 }
@@ -41,9 +41,9 @@ void loop()
 {
   chute.update();
 
-  float motorSpeed = processor.Think(chute, joystick, cwLimit, ccwLimit, false, pidParams);
+  float motorSpeed = processor.update(chute, joystick, cwLimit, ccwLimit, false, pidParams);
 
-  motor.SetMotorSpeed(motorSpeed);
+  motor.setMotorSpeed(motorSpeed);
 
   // Add battery voltage sensing logic here
   // Serial.print(analogRead(A0));
