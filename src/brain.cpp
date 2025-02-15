@@ -17,7 +17,7 @@ float Setpoint, Input, Output;
 
 QuickPID myPID(&Input, &Output, &Setpoint);
 
-void Brain::Initialize()
+void Processor::Initialize()
 {
   startingMillis = millis();
 
@@ -123,7 +123,7 @@ double getShortestAngleDifference(double target, double current)
   return difference;
 }
 
-bool Brain::checkManualMode(bool buttonPressed)
+bool Processor::checkManualMode(bool buttonPressed)
 {
   if (buttonPressed == true)
   {
@@ -144,7 +144,7 @@ bool Brain::checkManualMode(bool buttonPressed)
   return m_isManual;
 }
 
-Mode Brain::DetermineMode(Mode previousMode, Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit)
+Mode Processor::DetermineMode(Mode previousMode, Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit)
 {
   m_isManual = true; // checkManualMode(joystick.isButtonPressed());
 
@@ -188,7 +188,7 @@ Mode Brain::DetermineMode(Mode previousMode, Chute &chute, Joystick &joystick, L
   return Mode::HoldPosition;
 }
 
-float Brain::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, bool verbose, PIDParameters pidParams)
+float Processor::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, bool verbose, PIDParameters pidParams)
 {
 
   // if(Kp != pidParams.proportional || Ki != pidParams.integral || Kd != pidParams.derivative){

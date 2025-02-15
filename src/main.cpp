@@ -12,7 +12,7 @@ LimitSwitch ccwLimit(ccwPin);
 LimitSwitch cwLimit(cwPin);
 Joystick joystick;
 Motor motor;
-Brain brain;
+Processor processor;
 IMU chuteIMU;
 Chute chute(chuteIMU);
 
@@ -32,7 +32,7 @@ void setup()
 
   chute.Initialize();
   motor.Initialize();
-  brain.Initialize();
+  processor.Initialize();
 
   pinMode(A0, INPUT);
 }
@@ -41,7 +41,7 @@ void loop()
 {
   chute.update();
 
-  float motorSpeed = brain.Think(chute, joystick, cwLimit, ccwLimit, false, pidParams);
+  float motorSpeed = processor.Think(chute, joystick, cwLimit, ccwLimit, false, pidParams);
 
   motor.SetMotorSpeed(motorSpeed);
 

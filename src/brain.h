@@ -27,7 +27,7 @@ enum class Mode
   Error
 };
 
-class Brain
+class Processor
 {
 private:
   bool m_isManual = true;
