@@ -6,10 +6,8 @@
 
 // Define your constants here
 
-
 const int ccwPin = 2;
 const int cwPin = 3;
-
 
 const int voltageReadingPin = A0;
 

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "limitSwitch.h";
-#include "chute.h";
-#include "joystick.h";
-#include "motor.h";
-#include "QuickPID.h";
+#include "limitSwitch.h"
+#include "chute.h"
+#include "joystick.h"
+#include "motor.h"
+#include "QuickPID.h"
 
-struct PIDParameters {
+struct PIDParameters
+{
   float proportional;
   float integral;
   float derivative;
@@ -35,9 +36,6 @@ private:
   Mode DetermineMode(Mode, Chute &, Joystick &, LimitSwitch &, LimitSwitch &);
 
 public:
-  void Initialize() ;
+  void Initialize();
   float Think(Chute &, Joystick &, LimitSwitch &, LimitSwitch &, bool, PIDParameters);
-
-
 };
-

@@ -1,12 +1,11 @@
 #include <Arduino.h>
 #pragma once
 
-
 class Joystick
 {
-    
+
 private:
-    const int m_analogPin = A1;  // Joystick connected to analog pin A0
+    const int m_analogPin = A1; // Joystick connected to analog pin A0
     const int m_buttonPin = 6;
     float currentValue();
     // const int deadZoneLower = 460; // Lower bound for joystick dead zone
@@ -15,7 +14,7 @@ private:
     const int minValue = 0;
     const int centerValue = 512; // Center value for analogRead (0-1023)
     const int maxValue = 1024;
-    const int deadZone = 50;     // Dead zone threshold
+    const int deadZone = 50; // Dead zone threshold
 
 public:
     Joystick();

@@ -1,11 +1,11 @@
 
-#include "Arduino.h";
-#include "brain.h";
-#include "imu.h";
-#include "constants.h";
+#include "Arduino.h"
+#include "brain.h"
+#include "imu.h"
+#include "constants.h"
 
 // PID Variables
-//Ku = 10; Tu = 1
+// Ku = 10; Tu = 1
 float Kp = 0.02;
 float Ki = 0.002;
 float Kd = 0;
@@ -17,18 +17,20 @@ float Setpoint, Input, Output;
 
 QuickPID myPID(&Input, &Output, &Setpoint);
 
-void Brain::Initialize(){
+void Brain::Initialize()
+{
   startingMillis = millis();
-  
 
   myPID.SetOutputLimits(-1, 1);
   myPID.SetSampleTimeUs(100000);
   myPID.SetTunings(Kp, Ki, Kd);
 }
 
-bool shouldPrint(){
+bool shouldPrint()
+{
 
-  if(millis() < lastPrint + 500){
+  if (millis() < lastPrint + 500)
+  {
     return false;
   }
   lastPrint = millis();
@@ -43,11 +45,12 @@ bool shouldPrint(){
 
 void printData(bool isManualmode, Mode currentMode, float output, float joystickPosition, float targetPosition, float currentPosition, float error, bool cwLimitHit, bool ccwLimitHit)
 {
-  if(!shouldPrint()){
+  if (!shouldPrint())
+  {
     return;
   }
-  Serial.print ("t:");
-  Serial.print(static_cast<float>(millis())/1000);
+  Serial.print("t:");
+  Serial.print(static_cast<float>(millis()) / 1000);
 
   // Serial.print ("mem:");
   // Serial.print(freeMemory());
@@ -123,7 +126,8 @@ double getShortestAngleDifference(double target, double current)
   {
     difference -= 360.0;
   }
-  if(abs(difference) < 0.1){
+  if (abs(difference) < 0.1)
+  {
     difference = 0;
   }
 
@@ -132,38 +136,42 @@ double getShortestAngleDifference(double target, double current)
 
 bool Brain::checkManualMode(bool buttonPressed)
 {
-    if (buttonPressed == true) {
-        if (!m_buttonPressLatch) {
-            m_buttonPressLatch = true;
-            m_isManual = !m_isManual; // Update the state
-            return m_isManual;
-        }
+  if (buttonPressed == true)
+  {
+    if (!m_buttonPressLatch)
+    {
+      m_buttonPressLatch = true;
+      m_isManual = !m_isManual; // Update the state
+      return m_isManual;
     }
+  }
 
-    if (!buttonPressed && m_buttonPressLatch) {
-        m_buttonPressLatch = false;
-    }
-    
-    // Always return the current state
-    return m_isManual;
+  if (!buttonPressed && m_buttonPressLatch)
+  {
+    m_buttonPressLatch = false;
+  }
+
+  // Always return the current state
+  return m_isManual;
 }
 
 Mode Brain::DetermineMode(Mode previousMode, Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit)
 {
-  m_isManual = checkManualMode(joystick.isButtonPressed());
+  m_isManual = true; // checkManualMode(joystick.isButtonPressed());
 
-  if ((cwLimit.isHit() && ccwLimit.isHit()) || !ChuteIMUConnected)
+  if ((cwLimit.isHit() && ccwLimit.isHit()) || !chute.isPositionValid())
   {
     return Mode::Error;
-  }
-  if (millis() < startingMillis + 9000)
-  {
-    return Mode::Startup;
   }
   if (m_isManual || joystick.isActive())
   {
     return Mode::ManualControl;
   }
+  if (millis() < startingMillis + 9000)
+  {
+    return Mode::Startup;
+  }
+
   if (previousMode == Mode::ManualControl || previousMode == Mode::Startup)
   {
     return Mode::TransitionToHold;
@@ -191,20 +199,17 @@ Mode Brain::DetermineMode(Mode previousMode, Chute &chute, Joystick &joystick, L
   return Mode::HoldPosition;
 }
 
-
-
 float Brain::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, bool verbose, PIDParameters pidParams)
 {
 
-  if(Kp != pidParams.proportional || Ki != pidParams.integral || Kd != pidParams.derivative){
-    Kp = pidParams.proportional;
-    Ki = pidParams.integral;
-    Kd = pidParams.derivative;
-    Serial.println("setting PID params");
-    myPID.SetTunings(Kp, Ki, Kd);
-  }
+  // if(Kp != pidParams.proportional || Ki != pidParams.integral || Kd != pidParams.derivative){
+  //   Kp = pidParams.proportional;
+  //   Ki = pidParams.integral;
+  //   Kd = pidParams.derivative;
+  //   Serial.println("setting PID params");
+  //   myPID.SetTunings(Kp, Ki, Kd);
+  // }
 
-  
   // if(verbose && shouldPrint()) {
   //   Serial.print("Kp:");
   //   Serial.print(myPID.GetKp(), 4);
@@ -219,8 +224,8 @@ float Brain::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, Limit
   switch (newMode)
   {
   case Mode::ManualControl:
-    myPID.SetMode(QuickPID::Control::manual);
-    
+    // myPID.SetMode(QuickPID::Control::manual);
+
     if (joystick.isPushedLeft() && !ccwLimit.isHit())
     {
       // Joystick moved to the left side
@@ -258,10 +263,12 @@ float Brain::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, Limit
 
     bool computePerformed;
     computePerformed = myPID.Compute();
-    if(computePerformed && Output > 0){
+    if (computePerformed && Output > 0)
+    {
       Output = Output + 0.09;
     }
-    if(computePerformed && Output < 0){
+    if (computePerformed && Output < 0)
+    {
       Output = Output - 0.09;
     }
     break;
@@ -270,7 +277,8 @@ float Brain::Think(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, Limit
     Output = 0;
     break;
   }
-  if(verbose){
+  if (verbose)
+  {
     printData(m_isManual, newMode, Output, joystick.value(), chute.targetPosition(), chute.currentPosition(), Input, cwLimit.isHit(), ccwLimit.isHit());
   }
   currentMode = newMode;

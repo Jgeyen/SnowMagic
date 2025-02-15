@@ -1,32 +1,28 @@
-# Prerequisites
-*.d
+# Arduino Git Ignore File
+# Adapted from https://github.com/github/gitignore/blob/main/Arduino.gitignore
 
-# Compiled Object files
-*.slo
-*.lo
+# Ignore compiled binary files
+*.hex
+*.bin
+*.elf
+
+# Ignore object files
 *.o
-*.obj
 
-# Precompiled Headers
-*.gch
-*.pch
+# Ignore build folders
+*/build/
+*.ino.cpp
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Ignore Arduino temporary files
+*.ino.elf
+*.ino.hex
 
-# Fortran module files
-*.mod
-*.smod
+# Ignore backup files created by the Arduino IDE
+*.bak
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# Ignore local IDE settings (e.g., VS Code)
+.vscode/
 
-# Executables
-*.exe
-*.out
-*.app
+# Ignore system files
+.DS_Store
+Thumbs.db
