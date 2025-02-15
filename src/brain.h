@@ -5,6 +5,7 @@
 #include "joystick.h"
 #include "motor.h"
 #include "QuickPID.h"
+#include "shared.h"
 
 struct PIDParameters
 {

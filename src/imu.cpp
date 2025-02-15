@@ -15,7 +15,7 @@ void IMU::i2c_scan()
       if (poss_addresses[add_int] == 0x69 || poss_addresses[add_int] == 0x68)
       {
         Serial.println("\t- address is ICM.");
-        ICM_address = poss_addresses[add_int];
+        m_ICM_address = poss_addresses[add_int];
         isConnected = true;
       }
     }
@@ -34,7 +34,7 @@ void IMU::initialize()
   if (isConnected)
   {
     Serial.println("ICM Found");
-    chuteIMU.init(icmSettings);
+    m_imu.init(icmSettings);
   }
   else
   {
@@ -42,12 +42,13 @@ void IMU::initialize()
   }
 }
 
+
+
 void IMU::updateValues()
 {
-  unsigned long currentTime = millis();
-  if (currentTime - lastUpdateTime >= UPDATE_INTERVAL_MS)
+
+  if (Shared::isTimeElapsed(m_lastUpdateTime, UPDATE_INTERVAL_MS))
   {
-    lastUpdateTime = currentTime;
     // Pull the update from the ICM20948
     pollIMU();
   }
@@ -58,9 +59,9 @@ void IMU::pollIMU()
   float roll, pitch, yaw;
   char sensor_string_buff[128];
 
-  if (chuteIMU.euler6DataIsReady())
+  if (m_imu.euler6DataIsReady())
   {
-    chuteIMU.readEuler6Data(&roll, &pitch, &yaw);
+    m_imu.readEuler6Data(&roll, &pitch, &yaw);
     yaw = yaw;
   }
 }

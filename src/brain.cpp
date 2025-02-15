@@ -26,17 +26,6 @@ void Brain::Initialize()
   myPID.SetTunings(Kp, Ki, Kd);
 }
 
-bool shouldPrint()
-{
-
-  if (millis() < lastPrint + 500)
-  {
-    return false;
-  }
-  lastPrint = millis();
-  return true;
-}
-
 // int freeMemory() {
 //   extern int __heap_start, *__brkval;
 //   int v;
@@ -45,7 +34,7 @@ bool shouldPrint()
 
 void printData(bool isManualmode, Mode currentMode, float output, float joystickPosition, float targetPosition, float currentPosition, float error, bool cwLimitHit, bool ccwLimitHit)
 {
-  if (!shouldPrint())
+  if (!Shared::isTimeElapsed(lastPrint,500))
   {
     return;
   }

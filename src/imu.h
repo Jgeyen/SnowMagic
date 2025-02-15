@@ -1,12 +1,21 @@
 #pragma once
 #include "Arduino-ICM20948.h"
 #include <Wire.h>
+#include "shared.h"
 
 class IMU
 {
 private:
+    void i2c_scan();
+    void pollIMU();
+
     const unsigned long UPDATE_INTERVAL_MS = 10; // 10 ms = 1/100 second (100 Hz)
-    unsigned long lastUpdateTime = 0;
+    unsigned long m_lastUpdateTime = 0;
+    static const uint8_t number_i2c_addr = 2;
+    uint8_t poss_addresses[number_i2c_addr] = {0X69, 0X68};
+    uint8_t m_ICM_address;
+    ArduinoICM20948 m_imu;
+
     ArduinoICM20948Settings icmSettings = {
         .i2c_speed = 115200,               // i2c clock speed
         .is_SPI = false,                   // Enable SPI, if disable use i2c
@@ -33,12 +42,6 @@ private:
         .steps_frequency = 50              // Max frequency = 225, min frequency = 50
 
     };
-    static const uint8_t number_i2c_addr = 2;
-    uint8_t poss_addresses[number_i2c_addr] = {0X69, 0X68};
-    uint8_t ICM_address;
-    ArduinoICM20948 chuteIMU;
-    void i2c_scan();
-    void pollIMU();
 
 public:
     float yaw;
