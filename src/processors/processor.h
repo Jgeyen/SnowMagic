@@ -33,10 +33,15 @@ private:
   bool m_isManual = true;
   bool m_buttonPressLatch = false;
   int m_buttonCount;
+  Chute &m_chute;
+  Joystick &m_joystick;
+  LimitSwitch &m_cwLimit;
+  LimitSwitch &m_ccwLimit;
   bool checkManualMode(bool);
-  Mode determineMode(Mode, Chute &, Joystick &, LimitSwitch &, LimitSwitch &);
+  Mode determineMode(Mode previousMode);
 
 public:
+  Processor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit);
   void initialize();
-  float update(Chute &, Joystick &, LimitSwitch &, LimitSwitch &, bool, PIDParameters);
+  float update(bool, PIDParameters);
 };

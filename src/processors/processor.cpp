@@ -17,6 +17,17 @@ float Setpoint, Input, Output;
 
 QuickPID myPID(&Input, &Output, &Setpoint);
 
+Processor::Processor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit)
+  : m_chute(chute),
+    m_joystick(joystick),
+    m_cwLimit(cwLimit),
+    m_ccwLimit(ccwLimit),
+    m_isManual(true),
+    m_buttonPressLatch(false),
+    m_buttonCount(0)
+{
+}
+
 void Processor::initialize()
 {
   startingMillis = millis();
@@ -144,15 +155,15 @@ bool Processor::checkManualMode(bool buttonPressed)
   return m_isManual;
 }
 
-Mode Processor::determineMode(Mode previousMode, Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit)
+Mode Processor::determineMode(Mode previousMode)
 {
   m_isManual = true; // checkManualMode(joystick.isButtonPressed());
 
-  if ((cwLimit.isHit() && ccwLimit.isHit()) || !chute.isPositionValid())
+  if ((m_cwLimit.isHit() && m_ccwLimit.isHit()) || !m_chute.isPositionValid())
   {
     return Mode::Error;
   }
-  if (m_isManual || joystick.isActive())
+  if (m_isManual || m_joystick.isActive())
   {
     return Mode::ManualControl;
   }
@@ -165,30 +176,30 @@ Mode Processor::determineMode(Mode previousMode, Chute &chute, Joystick &joystic
   {
     return Mode::TransitionToHold;
   }
-  if (cwLimit.isHit())
+  if (m_cwLimit.isHit())
   {
     if (previousMode != Mode::ManualControl)
     {
-      if (chute.currentPosition() + 5 < chute.targetPosition())
+      if (m_chute.currentPosition() + 5 < m_chute.targetPosition())
       {
         return Mode::TransitionToHold;
       }
-      if (chute.currentPosition() + chute.totalRange() - 5 > chute.targetPosition())
+      if (m_chute.currentPosition() + m_chute.totalRange() - 5 > m_chute.targetPosition())
       {
         return Mode::TraverseCCWToTP;
       }
     }
     return Mode::AtCWLimit;
   }
-  if (ccwLimit.isHit())
+  if (m_ccwLimit.isHit())
   {
-    return chute.currentPosition() - 5 > chute.targetPosition() ? Mode::TransitionToHold : Mode::AtCCWLimit;
+    return m_chute.currentPosition() - 5 > m_chute.targetPosition() ? Mode::TransitionToHold : Mode::AtCCWLimit;
   }
 
   return Mode::HoldPosition;
 }
 
-float Processor::update(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, bool verbose, PIDParameters pidParams)
+float Processor::update(bool verbose, PIDParameters pidParams)
 {
 
   // if(Kp != pidParams.proportional || Ki != pidParams.integral || Kd != pidParams.derivative){
@@ -208,22 +219,22 @@ float Processor::update(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, 
   //   Serial.println(myPID.GetKd(), 4);
   // }
 
-  Mode newMode = this->determineMode(currentMode, chute, joystick, cwLimit, ccwLimit);
+  Mode newMode = this->determineMode(currentMode);
 
   switch (newMode)
   {
   case Mode::ManualControl:
     // myPID.SetMode(QuickPID::Control::manual);
 
-    if (joystick.isPushedLeft() && !ccwLimit.isHit())
+    if (m_joystick.isPushedLeft() && !m_ccwLimit.isHit())
     {
       // Joystick moved to the left side
-      Output = joystick.value();
+      Output = m_joystick.value();
     }
-    else if (joystick.isPushedRight() && !cwLimit.isHit())
+    else if (m_joystick.isPushedRight() && !m_cwLimit.isHit())
     {
       // Joystick moved to the right side
-      Output = joystick.value();
+      Output = m_joystick.value();
     }
     else
     {
@@ -236,7 +247,7 @@ float Processor::update(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, 
     Output = 0;
     break;
   case Mode::TransitionToHold:
-    chute.captureTargetPosition();
+    m_chute.captureTargetPosition();
     myPID.SetMode(QuickPID::Control::automatic);
     break;
   case Mode::AtCWLimit:
@@ -248,7 +259,7 @@ float Processor::update(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, 
     Output = 0;
     break;
   case Mode::HoldPosition:
-    Input = getShortestAngleDifference(chute.targetPosition(), chute.currentPosition());
+    Input = getShortestAngleDifference(m_chute.targetPosition(), m_chute.currentPosition());
 
     bool computePerformed;
     computePerformed = myPID.Compute();
@@ -268,7 +279,7 @@ float Processor::update(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, 
   }
   if (verbose)
   {
-    printData(m_isManual, newMode, Output, joystick.value(), chute.targetPosition(), chute.currentPosition(), Input, cwLimit.isHit(), ccwLimit.isHit());
+    printData(m_isManual, newMode, Output, m_joystick.value(), m_chute.targetPosition(), m_chute.currentPosition(), Input, m_cwLimit.isHit(), m_ccwLimit.isHit());
   }
   currentMode = newMode;
   return Output;

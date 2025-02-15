@@ -1,5 +1,5 @@
 #pragma once
-#include "processor.h"
+#include "processors/processor.h"
 
 class SerialInput
 {

@@ -4,7 +4,7 @@
 #include "chute.h"
 #include "limitSwitch.h"
 #include "joystick.h"
-#include "processor.h"
+#include "processors/processor.h"
 #include "constants.h"
 
 // Globals
@@ -12,9 +12,9 @@ LimitSwitch ccwLimit(ccwPin);
 LimitSwitch cwLimit(cwPin);
 Joystick joystick;
 Motor motor;
-Processor processor;
 IMU chuteIMU;
 Chute chute(chuteIMU);
+Processor processor(chute, joystick, cwLimit, ccwLimit);
 
 PIDParameters pidParams = {0.02, 0.002, 0};
 
@@ -41,7 +41,7 @@ void loop()
 {
   chute.update();
 
-  float motorSpeed = processor.update(chute, joystick, cwLimit, ccwLimit, false, pidParams);
+  float motorSpeed = processor.update(false, pidParams);
 
   motor.setMotorSpeed(motorSpeed);
 
