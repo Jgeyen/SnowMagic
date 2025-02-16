@@ -17,14 +17,13 @@ float Setpoint, Input, Output;
 
 QuickPID myPID(&Input, &Output, &Setpoint);
 
-Processor::Processor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit)
+Processor::Processor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, Motor &motor)
   : m_chute(chute),
     m_joystick(joystick),
     m_cwLimit(cwLimit),
     m_ccwLimit(ccwLimit),
-    m_isManual(true),
-    m_buttonPressLatch(false),
-    m_buttonCount(0)
+    m_motor(motor),
+    m_manualProcessor(chute, joystick, cwLimit, ccwLimit, motor)
 {
 }
 
@@ -134,40 +133,20 @@ double getShortestAngleDifference(double target, double current)
   return difference;
 }
 
-bool Processor::checkManualMode(bool buttonPressed)
-{
-  if (buttonPressed == true)
-  {
-    if (!m_buttonPressLatch)
-    {
-      m_buttonPressLatch = true;
-      m_isManual = !m_isManual; // Update the state
-      return m_isManual;
-    }
-  }
 
-  if (!buttonPressed && m_buttonPressLatch)
-  {
-    m_buttonPressLatch = false;
-  }
-
-  // Always return the current state
-  return m_isManual;
-}
 
 Mode Processor::determineMode(Mode previousMode)
 {
-  m_isManual = true; // checkManualMode(joystick.isButtonPressed());
 
   if ((m_cwLimit.isHit() && m_ccwLimit.isHit()) || !m_chute.isPositionValid())
   {
     return Mode::Error;
   }
-  if (m_isManual || m_joystick.isActive())
+  if (m_manualProcessor.checkIfCurrentMode())
   {
     return Mode::ManualControl;
   }
-  if (millis() < startingMillis + 9000)
+  if (millis() < startingMillis + 9000 || !m_chute.isPositionValid())
   {
     return Mode::Startup;
   }
@@ -224,24 +203,7 @@ float Processor::update(bool verbose, PIDParameters pidParams)
   switch (newMode)
   {
   case Mode::ManualControl:
-    // myPID.SetMode(QuickPID::Control::manual);
-
-    if (m_joystick.isPushedLeft() && !m_ccwLimit.isHit())
-    {
-      // Joystick moved to the left side
-      Output = m_joystick.value();
-    }
-    else if (m_joystick.isPushedRight() && !m_cwLimit.isHit())
-    {
-      // Joystick moved to the right side
-      Output = m_joystick.value();
-    }
-    else
-    {
-      // Joystick is in the dead zone, stop the motor
-      Output = 0;
-    }
-    break;
+    
   case Mode::Startup:
     myPID.SetMode(QuickPID::Control::manual);
     Output = 0;
@@ -279,7 +241,7 @@ float Processor::update(bool verbose, PIDParameters pidParams)
   }
   if (verbose)
   {
-    printData(m_isManual, newMode, Output, m_joystick.value(), m_chute.targetPosition(), m_chute.currentPosition(), Input, m_cwLimit.isHit(), m_ccwLimit.isHit());
+    printData(m_manualProcessor.isManual, newMode, Output, m_joystick.value(), m_chute.targetPosition(), m_chute.currentPosition(), Input, m_cwLimit.isHit(), m_ccwLimit.isHit());
   }
   currentMode = newMode;
   return Output;
