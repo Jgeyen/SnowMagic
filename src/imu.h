@@ -1,5 +1,9 @@
 #pragma once
-#include "Arduino-ICM20948.h"
+#ifdef ARDUINO
+  #include <Arduino-ICM20948.h>
+#else
+#include "../test/mocks/Arduino-ICM20948.h"
+#endif
 #include <Wire.h>
 #include "shared.h"
 

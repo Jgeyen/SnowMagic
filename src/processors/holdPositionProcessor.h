@@ -3,7 +3,12 @@
 #include "chute.h"
 #include "joystick.h"
 #include "motor.h"
-#include "QuickPID.h"
+#ifdef ARDUINO
+  #include <QuickPID.h>
+#else
+#include "../test/mocks/QuickPID.h"
+#endif
+
 
 class HoldPositionProcessor
 {

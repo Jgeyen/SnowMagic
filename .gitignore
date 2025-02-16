@@ -6,6 +6,9 @@
 *.bin
 *.elf
 
+# Ignore pio files
+.pio
+
 # Ignore object files
 *.o
 
