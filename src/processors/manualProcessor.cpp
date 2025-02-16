@@ -11,7 +11,7 @@ ManualProcessor::ManualProcessor(Chute &chute, Joystick &joystick, LimitSwitch &
 
 bool ManualProcessor::userSelectedManualMode()
 {
-    //TODO: remove this
+    // TODO: remove this
     isManual = true;
     return isManual;
 

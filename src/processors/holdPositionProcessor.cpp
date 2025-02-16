@@ -85,40 +85,40 @@ float HoldPositionProcessor::input() const
     return m_input;
 }
 
-float determineDirection(float yawSetPoint, float currentYaw, LimitSwitch cwLimit, LimitSwitch ccwLimit)
-{
-    if (cwLimit.isHit() || ccwLimit.isHit())
-    {
-        // Calculate the shortest distance to the target yaw in both directions
-        float delta_yaw_cw = calcShortestYawDelta(yawSetPoint, currentYaw, "clockwise");
-        float delta_yaw_ccw = calcShortestYawDelta(yawSetPoint, currentYaw, "counter-clockwise");
+// float determineDirection(float yawSetPoint, float currentYaw, LimitSwitch cwLimit, LimitSwitch ccwLimit)
+// {
+//     if (cwLimit.isHit() || ccwLimit.isHit())
+//     {
+//         // Calculate the shortest distance to the target yaw in both directions
+//         float delta_yaw_cw = calcShortestYawDelta(yawSetPoint, currentYaw, "clockwise");
+//         float delta_yaw_ccw = calcShortestYawDelta(yawSetPoint, currentYaw, "counter-clockwise");
 
-        // If one way is shorter and we've hit the limit switch in the opposite direction
-        if (abs(delta_yaw_cw) < abs(delta_yaw_ccw) && cwLimit.isHit())
-        {
-            // Change direction to clockwise
-            yawSetPoint = currentYaw + delta_yaw_cw;
-        }
-        else if (abs(delta_yaw_ccw) < abs(delta_yaw_cw) && ccwLimit.isHit())
-        {
-            // Change direction to counter-clockwise
-            yawSetPoint = currentYaw + delta_yaw_ccw;
-        }
-    }
-}
+//         // If one way is shorter and we've hit the limit switch in the opposite direction
+//         if (abs(delta_yaw_cw) < abs(delta_yaw_ccw) && cwLimit.isHit())
+//         {
+//             // Change direction to clockwise
+//             yawSetPoint = currentYaw + delta_yaw_cw;
+//         }
+//         else if (abs(delta_yaw_ccw) < abs(delta_yaw_cw) && ccwLimit.isHit())
+//         {
+//             // Change direction to counter-clockwise
+//             yawSetPoint = currentYaw + delta_yaw_ccw;
+//         }
+//     }
+// }
 
-float calcShortestYawDelta(float targetYaw, float currentYaw, bool cwDirection)
-{
-    float delta_yaw;
+// float calcShortestYawDelta(float targetYaw, float currentYaw, bool cwDirection)
+// {
+//     float delta_yaw;
 
-    if (cwDirection)
-    {
-        // Calculate clockwise delta_yaw here
-    }
-    else
-    {
-        // Calculate counter-clockwise delta_yaw here
-    }
+//     if (cwDirection)
+//     {
+//         // Calculate clockwise delta_yaw here
+//     }
+//     else
+//     {
+//         // Calculate counter-clockwise delta_yaw here
+//     }
 
-    return delta_yaw;
-}
+//     return delta_yaw;
+// }

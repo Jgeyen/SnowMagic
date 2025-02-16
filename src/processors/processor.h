@@ -10,9 +10,6 @@
 #include "holdPositionProcessor.h"
 #include "pidParameters.h"
 
-
-
-
 class Processor
 {
 private:
@@ -26,7 +23,6 @@ private:
   SerialOutput m_serialWriter;
   unsigned long startingMillis;
 
-  bool checkManualMode(bool);
   Mode determineMode(Mode previousMode);
 
 public:

@@ -13,7 +13,6 @@ private:
     LimitSwitch &m_ccwLimit;
     Motor &m_motor;
     bool m_buttonPressLatch = false;
-    
 
     bool userSelectedManualMode();
 
@@ -22,5 +21,4 @@ public:
     void update(bool verbose);
     bool checkIfCurrentMode();
     bool isManual = true;
-    
 };
