@@ -18,7 +18,7 @@ private:
     float m_Kp = 0.02;
     float m_Ki = 0.002;
     float m_Kd = 0;
-    float m_input;
+    float m_input = 0;
     double getShortestAngleDifference(double target, double current);
 
 public:
