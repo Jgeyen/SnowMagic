@@ -6,6 +6,7 @@
 #include "joystick.h"
 #include "processors/processor.h"
 #include "constants.h"
+#include "pidParameters.h"
 
 // Globals
 LimitSwitch ccwLimit(ccwPin);
@@ -14,7 +15,8 @@ Joystick joystick;
 Motor motor;
 IMU chuteIMU;
 Chute chute(chuteIMU);
-Processor processor(chute, joystick, cwLimit, ccwLimit, motor);
+SerialOutput serialWriter;
+Processor processor(chute, joystick, cwLimit, ccwLimit, motor, serialWriter);
 
 PIDParameters pidParams = {0.02, 0.002, 0};
 
