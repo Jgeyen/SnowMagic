@@ -178,7 +178,7 @@ Mode Processor::determineMode(Mode previousMode)
   return Mode::HoldPosition;
 }
 
-float Processor::update(bool verbose, PIDParameters pidParams)
+void Processor::update(bool verbose, PIDParameters pidParams)
 {
 
   // if(Kp != pidParams.proportional || Ki != pidParams.integral || Kd != pidParams.derivative){
@@ -197,6 +197,7 @@ float Processor::update(bool verbose, PIDParameters pidParams)
   //   Serial.print("; Kd:");
   //   Serial.println(myPID.GetKd(), 4);
   // }
+  m_chute.update();
 
   Mode newMode = this->determineMode(currentMode);
 
@@ -244,7 +245,6 @@ float Processor::update(bool verbose, PIDParameters pidParams)
     printData(m_manualProcessor.isManual, newMode, Output, m_joystick.value(), m_chute.targetPosition(), m_chute.currentPosition(), Input, m_cwLimit.isHit(), m_ccwLimit.isHit());
   }
   currentMode = newMode;
-  return Output;
 }
 
 float calcShortestYawDelta(float targetYaw, float currentYaw, bool cwDirection)

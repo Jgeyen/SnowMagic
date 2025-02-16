@@ -39,11 +39,8 @@ void setup()
 
 void loop()
 {
-  chute.update();
 
-  float motorSpeed = processor.update(false, pidParams);
-
-  motor.setMotorSpeed(motorSpeed);
+  processor.update(false, pidParams);
 
   // Add battery voltage sensing logic here
   // Serial.print(analogRead(A0));

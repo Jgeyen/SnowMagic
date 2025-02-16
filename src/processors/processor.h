@@ -45,5 +45,5 @@ private:
 public:
   Processor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, Motor &motor);
   void initialize();
-  float update(bool, PIDParameters);
+  void update(bool, PIDParameters);
 };
