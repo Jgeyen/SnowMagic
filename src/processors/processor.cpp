@@ -6,34 +6,26 @@
 
 // PID Variables
 // Ku = 10; Tu = 1
-float Kp = 0.02;
-float Ki = 0.002;
-float Kd = 0;
+
 unsigned long startingMillis;
 unsigned long lastPrint = 0;
 bool isStarting = true;
 Mode currentMode = Mode::Startup;
-float Setpoint, Input, Output;
-
-QuickPID myPID(&Input, &Output, &Setpoint);
 
 Processor::Processor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, Motor &motor)
-  : m_chute(chute),
-    m_joystick(joystick),
-    m_cwLimit(cwLimit),
-    m_ccwLimit(ccwLimit),
-    m_motor(motor),
-    m_manualProcessor(chute, joystick, cwLimit, ccwLimit, motor)
+    : m_chute(chute),
+      m_joystick(joystick),
+      m_cwLimit(cwLimit),
+      m_ccwLimit(ccwLimit),
+      m_motor(motor),
+      m_manualProcessor(chute, joystick, cwLimit, ccwLimit, motor),
+      m_holdPositionProcessor(chute, joystick, cwLimit, ccwLimit, motor)
 {
 }
 
 void Processor::initialize()
 {
   startingMillis = millis();
-
-  myPID.SetOutputLimits(-1, 1);
-  myPID.SetSampleTimeUs(100000);
-  myPID.SetTunings(Kp, Ki, Kd);
 }
 
 // int freeMemory() {
@@ -44,7 +36,7 @@ void Processor::initialize()
 
 void printData(bool isManualmode, Mode currentMode, float output, float joystickPosition, float targetPosition, float currentPosition, float error, bool cwLimitHit, bool ccwLimitHit)
 {
-  if (!Shared::isTimeElapsed(lastPrint,500))
+  if (!Shared::isTimeElapsed(lastPrint, 500))
   {
     return;
   }
@@ -113,27 +105,6 @@ void printData(bool isManualmode, Mode currentMode, float output, float joystick
     break;
   }
 }
-
-double getShortestAngleDifference(double target, double current)
-{
-  double difference = fmod(target - current, 360.0);
-  if (difference < -180.0)
-  {
-    difference += 360.0;
-  }
-  if (difference > 180.0)
-  {
-    difference -= 360.0;
-  }
-  if (abs(difference) < 0.1)
-  {
-    difference = 0;
-  }
-
-  return difference;
-}
-
-
 
 Mode Processor::determineMode(Mode previousMode)
 {
@@ -204,45 +175,29 @@ void Processor::update(bool verbose, PIDParameters pidParams)
   switch (newMode)
   {
   case Mode::ManualControl:
-    
+
   case Mode::Startup:
-    myPID.SetMode(QuickPID::Control::manual);
-    Output = 0;
+    m_holdPositionProcessor.disableHoldPosition();
     break;
   case Mode::TransitionToHold:
-    m_chute.captureTargetPosition();
-    myPID.SetMode(QuickPID::Control::automatic);
+  m_holdPositionProcessor.transitionToHold();
     break;
   case Mode::AtCWLimit:
-    myPID.SetMode(QuickPID::Control::manual);
-    Output = 0;
+    m_holdPositionProcessor.disableHoldPosition();
     break;
   case Mode::AtCCWLimit:
-    myPID.SetMode(QuickPID::Control::manual);
-    Output = 0;
+    m_holdPositionProcessor.disableHoldPosition();
     break;
   case Mode::HoldPosition:
-    Input = getShortestAngleDifference(m_chute.targetPosition(), m_chute.currentPosition());
-
-    bool computePerformed;
-    computePerformed = myPID.Compute();
-    if (computePerformed && Output > 0)
-    {
-      Output = Output + 0.09;
-    }
-    if (computePerformed && Output < 0)
-    {
-      Output = Output - 0.09;
-    }
+    m_holdPositionProcessor.update(false);
     break;
   default:
-    myPID.SetMode(QuickPID::Control::manual);
-    Output = 0;
+    m_holdPositionProcessor.disableHoldPosition();
     break;
   }
   if (verbose)
   {
-    printData(m_manualProcessor.isManual, newMode, Output, m_joystick.value(), m_chute.targetPosition(), m_chute.currentPosition(), Input, m_cwLimit.isHit(), m_ccwLimit.isHit());
+    printData(m_manualProcessor.isManual, newMode, m_motor.speed(), m_joystick.value(), m_chute.targetPosition(), m_chute.currentPosition(), m_holdPositionProcessor.input(), m_cwLimit.isHit(), m_ccwLimit.isHit());
   }
   currentMode = newMode;
 }

@@ -4,9 +4,10 @@
 #include "chute.h"
 #include "joystick.h"
 #include "motor.h"
-#include "QuickPID.h"
+
 #include "shared.h"
 #include "manualProcessor.h"
+#include "holdPositionProcessor.h"
 
 struct PIDParameters
 {
@@ -37,6 +38,7 @@ private:
   LimitSwitch &m_ccwLimit;
   Motor &m_motor;
   ManualProcessor m_manualProcessor;
+  HoldPositionProcessor m_holdPositionProcessor;
   
 
   bool checkManualMode(bool);

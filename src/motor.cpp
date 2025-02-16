@@ -35,3 +35,7 @@ void Motor::setDirection(Direction direction)
         digitalWrite(m_directionPin, HIGH);
     }
 }
+
+float Motor::speed() const {
+    return m_speed;
+}
