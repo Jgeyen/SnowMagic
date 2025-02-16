@@ -14,7 +14,7 @@ Joystick joystick;
 Motor motor;
 IMU chuteIMU;
 Chute chute(chuteIMU);
-Processor processor(chute, joystick, cwLimit, ccwLimit);
+Processor processor(chute, joystick, cwLimit, ccwLimit, motor);
 
 PIDParameters pidParams = {0.02, 0.002, 0};
 
