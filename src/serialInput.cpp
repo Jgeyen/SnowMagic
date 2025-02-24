@@ -75,4 +75,5 @@ PIDParameters SerialInput::processInput(PIDParameters params)
 
     return params; // Return the updated struct
   }
+  return params;
 }

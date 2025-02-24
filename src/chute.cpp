@@ -31,3 +31,6 @@ void Chute::initialize()
   Serial.print("Initialize Chute");
   Serial.println(m_chuteIMU.yaw);
 }
+
+float Chute::targetPosition() { return m_targetPosition; }
+float Chute::totalRange() { return m_totalRange; }

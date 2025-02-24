@@ -1,10 +1,11 @@
 #pragma once
 #ifdef ARDUINO
   #include <Arduino-ICM20948.h>
+  #include <Wire.h>
 #else
 #include "../test/mocks/Arduino-ICM20948.h"
 #endif
-#include <Wire.h>
+
 #include "shared.h"
 
 class IMU

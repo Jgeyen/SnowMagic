@@ -13,11 +13,11 @@ private:
 
 public:
     Chute(IMU &imu);
-    void initialize();
-    void update();
-    bool isPositionValid();
-    float currentPosition();
-    float targetPosition() { return m_targetPosition; }
-    float totalRange() { return m_totalRange; }
-    void captureTargetPosition();
+    virtual void initialize();
+    virtual void update();
+    virtual bool isPositionValid();
+    virtual float currentPosition();
+    virtual float targetPosition();
+    virtual float totalRange();
+    virtual void captureTargetPosition();
 };

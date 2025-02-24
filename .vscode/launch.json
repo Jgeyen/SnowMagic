@@ -12,35 +12,32 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/build/uno_r4_minima/firmware.elf",
-            "projectEnvName": "uno_r4_minima",
-            "toolchainBinDir": "/Users/jason/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "executable": "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/build/native/program",
+            "projectEnvName": "native",
+            "toolchainBinDir": "/usr/bin",
             "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "/Users/jason/.platformio/platforms/renesas-ra/misc/svd/R7FA4M1AB.svd",
             "preLaunchTask": {
                 "type": "PlatformIO",
-                "task": "Pre-Debug"
+                "task": "Pre-Debug (native)"
             }
         },
         {
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/build/uno_r4_minima/firmware.elf",
-            "projectEnvName": "uno_r4_minima",
-            "toolchainBinDir": "/Users/jason/.platformio/packages/toolchain-gccarmnoneeabi/bin",
-            "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "/Users/jason/.platformio/platforms/renesas-ra/misc/svd/R7FA4M1AB.svd"
+            "executable": "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/build/native/program",
+            "projectEnvName": "native",
+            "toolchainBinDir": "/usr/bin",
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (without uploading)",
-            "executable": "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/build/uno_r4_minima/firmware.elf",
-            "projectEnvName": "uno_r4_minima",
-            "toolchainBinDir": "/Users/jason/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "executable": "/Users/jason/workdir/github.com/jgeyen/SnowMagic/.pio/build/native/program",
+            "projectEnvName": "native",
+            "toolchainBinDir": "/usr/bin",
             "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "/Users/jason/.platformio/platforms/renesas-ra/misc/svd/R7FA4M1AB.svd",
             "loadMode": "manual"
         }
     ]
