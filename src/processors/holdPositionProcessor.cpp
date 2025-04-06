@@ -14,21 +14,23 @@ HoldPositionProcessor::HoldPositionProcessor(Chute &chute, Joystick &joystick, L
    m_output = 0.0f;
    m_pid.SetOutputLimits(-1, 1);
    m_pid.SetSampleTimeUs(100000);
-   // TODO: Set tunings based on PIDParameters struct passed from Processor
-   // Using default (or potentially zero) tunings for now
-   m_pid.SetTunings(0.02f, 0.002f, 0.0f); // Placeholder - use passed params later
+   // PID tunings will be set in the update method based on passed parameters
    m_pid.SetMode(QuickPID::Control::manual); // Start in manual mode
 }
 
-void HoldPositionProcessor::update(bool verbose)
+// Update method implementation - accepts PID parameters
+void HoldPositionProcessor::update(bool verbose, const PIDParameters &params)
 {
-    // if(Kp != pidParams.proportional || Ki != pidParams.integral || Kd != pidParams.derivative){
-    //   Kp = pidParams.proportional;
-    //   Ki = pidParams.integral;
-    //   Kd = pidParams.derivative;
-    //   Serial.println("setting PID params");
-    //   myPID.SetTunings(Kp, Ki, Kd);
-    // }
+    // Check if PID parameters have changed and update the controller
+    // Compare passed params with current controller values
+    if (params.proportional != m_pid.GetKp() ||
+        params.integral != m_pid.GetKi() ||
+        params.derivative != m_pid.GetKd())
+    {
+        m_pid.SetTunings(params.proportional, params.integral, params.derivative);
+        // Optional: Add a Serial print here to confirm tuning update
+        // Serial.println("PID Tunings Updated");
+    }
 
     // if(verbose && shouldPrint()) {
     //   Serial.print("Kp:");
@@ -45,14 +47,10 @@ void HoldPositionProcessor::update(bool verbose)
     bool computePerformed;
     computePerformed = m_pid.Compute(); // Use member PID controller
     // Use member m_output
-    if (computePerformed && m_output > 0)
-    {
-        m_output = m_output + 0.09; // Apply offset if needed (consider removing/tuning)
-    }
-    if (computePerformed && m_output < 0)
-    {
-        m_output = m_output - 0.09; // Apply offset if needed (consider removing/tuning)
-    }
+    // Removed the fixed offset logic:
+    // if (computePerformed && m_output > 0) { ... }
+    // if (computePerformed && m_output < 0) { ... }
+    // The raw PID output (m_output) will be used directly.
     m_motor.setMotorSpeed(m_output); // Use member PID output
 }
 double HoldPositionProcessor::getShortestAngleDifference(double target, double current)

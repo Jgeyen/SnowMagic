@@ -95,7 +95,8 @@ void Processor::update(bool verbose, PIDParameters pidParams)
     m_holdPositionProcessor.disableHoldPosition();
     break;
   case Mode::HoldPosition:
-    m_holdPositionProcessor.update(false);
+    // Pass the PID parameters received by Processor::update
+    m_holdPositionProcessor.update(false, pidParams);
     break;
   default:
     m_holdPositionProcessor.disableHoldPosition();

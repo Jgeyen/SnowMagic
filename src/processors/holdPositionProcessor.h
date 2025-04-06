@@ -3,6 +3,7 @@
 #include "chute.h"
 #include "joystick.h"
 #include "motor.h"
+#include "pidParameters.h"
 #ifdef ARDUINO
   #include <QuickPID.h>
 #else
@@ -30,7 +31,8 @@ private:
 
 public:
     HoldPositionProcessor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, Motor &motor);
-    void update(bool verbose);
+    // Update method now accepts PID parameters
+    void update(bool verbose, const PIDParameters &params);
     // bool checkIfCurrentMode();
     void disableHoldPosition();
     void transitionToHold();
