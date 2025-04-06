@@ -4,6 +4,8 @@
 
 void Motor::initialize()
 {
+    Serial.print("Initialize Motor");
+  
     pinMode(m_motorPin, OUTPUT);
     pinMode(m_directionPin, OUTPUT);
 }
@@ -18,6 +20,9 @@ void Motor::setMotorSpeed(float output)
     {
         m_direction = Direction::CW;
     }
+
+    // Store the requested speed (-1.0 to 1.0)
+    m_speed = output;
 
     float motorSpeed = m_maxDutyCycle * abs(output);
 

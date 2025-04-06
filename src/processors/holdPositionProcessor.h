@@ -19,10 +19,13 @@ private:
     LimitSwitch &m_ccwLimit;
     Motor &m_motor;
 
-    float m_Kp = 0.02f;
-    float m_Ki = 0.002f;
-    float m_Kd = 0.0f;
-    float m_input = 0.0f;
+    // PID variables moved from global scope
+    float m_setpoint;
+    float m_input;    // Represents the error (difference) calculated
+    float m_output;   // PID controller output
+    QuickPID m_pid;   // PID controller instance
+
+    // Helper function
     double getShortestAngleDifference(double target, double current);
 
 public:
@@ -32,5 +35,11 @@ public:
     void disableHoldPosition();
     void transitionToHold();
 
-    float input() const;
+    float input() const; // Returns the calculated error/input to PID
+    float getOutput() const; // Returns the calculated PID output
+    // Add getters for PID parameters if needed for printing
+    // Removed const because QuickPID::GetKx() methods are likely not const
+    float getKp();
+    float getKi();
+    float getKd();
 };

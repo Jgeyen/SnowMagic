@@ -62,6 +62,6 @@ void IMU::pollIMU()
   if (m_imu.euler6DataIsReady())
   {
     m_imu.readEuler6Data(&roll, &pitch, &yaw);
-    yaw = yaw;
+    this->yaw = yaw; // Assign local yaw reading to the class member
   }
 }

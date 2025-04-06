@@ -39,7 +39,7 @@ float Joystick::value()
     else
     {
         // Right movement
-        normalizedValue = fmap(currentValue(), centerValue - deadZone, maxValue, 0, 1);
+        normalizedValue = fmap(currentValue(), centerValue + deadZone, maxValue, 0, 1); // Corrected lower bound
     }
 
     // Clamp to -1.0 to 1.0

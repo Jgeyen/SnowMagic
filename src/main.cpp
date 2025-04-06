@@ -42,7 +42,7 @@ void setup()
 void loop()
 {
 
-  processor.update(false, pidParams);
+  processor.update(true, pidParams);
 
   // Add battery voltage sensing logic here
   // Serial.print(analogRead(A0));

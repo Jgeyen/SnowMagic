@@ -20,10 +20,11 @@ private:
   Motor &m_motor;
   ManualProcessor m_manualProcessor;
   HoldPositionProcessor m_holdPositionProcessor;
-  SerialOutput m_serialWriter;
-  unsigned long startingMillis;
+  SerialOutput &m_serialWriter; 
+  unsigned long m_startingMillis;
+  Mode m_currentMode; 
 
-  Mode determineMode(Mode previousMode);
+  Mode determineMode();
 
 public:
   Processor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, Motor &motor, SerialOutput &serialWriter);

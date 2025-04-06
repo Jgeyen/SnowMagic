@@ -1,14 +1,14 @@
 #include "Arduino.h"
 #include "serialInput.h"
 
-const byte numChars = 32;
-char receivedChars[numChars];
-boolean verbose = true;
-boolean newData = false;
 
-bool recvWithEndMarker()
+SerialInput::SerialInput() {
+    m_receivedChars[0] = '\0'; // Ensure buffer is initially empty
+}
+
+
+bool SerialInput::recvWithEndMarker()
 {
-  static byte ndx = 0;
   char endMarker = '\n';
   char stopSerial = '`';
   char rc;
@@ -19,23 +19,23 @@ bool recvWithEndMarker()
 
     if (rc == stopSerial)
     {
-      verbose = !verbose;
+      m_verbose = !m_verbose;
     }
     else
     {
       if (rc != endMarker)
       {
-        receivedChars[ndx] = rc;
-        ndx++;
-        if (ndx >= numChars)
+        m_receivedChars[m_ndx] = rc;
+        m_ndx++;
+        if (m_ndx >= numChars)
         {
-          ndx = numChars - 1;
+          m_ndx = numChars - 1;
         }
       }
       else
       {
-        receivedChars[ndx] = '\0'; // terminate the string
-        ndx = 0;
+        m_receivedChars[m_ndx] = '\0'; 
+        m_ndx = 0;
         return true;
       }
     }
@@ -46,9 +46,11 @@ bool recvWithEndMarker()
 // Function to process the command and update PID parameters, returning a struct
 PIDParameters SerialInput::processInput(PIDParameters params)
 {
-  if (recvWithEndMarker())
+  // Call the member method
+  if (this->recvWithEndMarker())
   {
-    char *command = receivedChars;
+    // Use the member buffer
+    char *command = m_receivedChars;
     // Check for the first character and parse the corresponding value
     if (command[0] == 'P' || command[0] == 'p')
     {
@@ -70,10 +72,13 @@ PIDParameters SerialInput::processInput(PIDParameters params)
     }
     else
     {
-      Serial.println("Invalid command"); // Handle unrecognized commands
+      Serial.println("Invalid command");
     }
 
-    return params; // Return the updated struct
+    return params; 
   }
   return params;
+}
+bool SerialInput::getVerbose() {
+    return m_verbose;
 }

@@ -13,5 +13,10 @@ void LimitSwitch::initialize()
 
 bool LimitSwitch::isHit()
 {
+    // For Normally Closed (NC) switches with INPUT_PULLUP:
+    // - Not pressed (closed circuit) -> LOW
+    // - Pressed (open circuit) -> HIGH
+    // - Broken wire (open circuit) -> HIGH
+    // Return true if pressed OR broken (HIGH)
     return digitalRead(m_pin);
 }

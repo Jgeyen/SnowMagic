@@ -1,74 +1,118 @@
 #include "serialOutput.h"
 #include "shared.h"
 
-void SerialOutput::printMainLoopData(bool isManualmode, Mode currentMode, float output, float joystickPosition, float targetPosition, float currentPosition, float error, bool cwLimitHit, bool ccwLimitHit)
+void SerialOutput::printMainLoopData(
+    Mode currentMode,
+    Motor &motor,
+    Joystick &joystick,
+    Chute &chute,
+    HoldPositionProcessor &holdProcessor,
+    LimitSwitch &cwLimit,
+    LimitSwitch &ccwLimit)
 {
-  if (!Shared::isTimeElapsed(lastPrint, 500))
-  {
-    return;
-  }
-  Serial.print("t:");
-  Serial.print(static_cast<float>(millis()) / 1000);
+    if (!Shared::isTimeElapsed(lastPrint, 500))
+    {
+        return;
+    }
 
-  // Serial.print ("mem:");
-  // Serial.print(freeMemory());
+    Serial.print("t:");
+    Serial.print(static_cast<float>(millis()) / 1000);
+    Serial.print(" | cm:");
+    switch (currentMode)
+    {
+    case Mode::ManualControl:
+        Serial.print("Manual");
+        break;
+    case Mode::Startup:
+        Serial.print("Startup");
+        break;
+    case Mode::TransitionToHold:
+        Serial.print("Transition");
+        break;
+    case Mode::HoldPosition:
+        Serial.print("Hold");
+        break;
+    case Mode::AtCWLimit:
+        Serial.print("AtCWLimit");
+        break;
+    case Mode::AtCCWLimit:
+        Serial.print("AtCCWLimit");
+        break;
+    case Mode::TraverseCCWToTP:
+        Serial.print("TraverseCCW");
+        break;
+    case Mode::TraverseCWToTP:
+        Serial.print("TraverseCW");
+        break;
+    case Mode::Error:
+        Serial.print("Error");
+        break;
+    default:
+        Serial.print("Unknown");
+        break;
+    }
+    Serial.print(" | cwl:");
+    Serial.print(cwLimit.isHit());
+    Serial.print(" | ccwl:");
+    Serial.print(ccwLimit.isHit());
+    Serial.print(" | cp:");
+    Serial.print(chute.currentPosition());
 
-  Serial.print("man:");
-  Serial.print(isManualmode);
+    // --- Mode-Specific Info ---
+    switch (currentMode)
+    {
+    case Mode::ManualControl:
+        Serial.print(" | jp:");
+        if (joystick.value() >= 0) Serial.print("+");
+        Serial.print(joystick.value());
+        Serial.print(" | mot_spd:");
+        if (motor.speed() >= 0) Serial.print("+");
+        Serial.print(motor.speed());
+        break;
 
-  Serial.print("; out:");
-  Serial.print(output);
+    case Mode::HoldPosition:
+        Serial.print(" | tp:");
+        
+        if (chute.targetPosition() >= 0) Serial.print("+");
+        Serial.print(chute.targetPosition());
+        Serial.print(" | er:");
+        if (holdProcessor.input() >= 0) Serial.print("+");
+        Serial.print(holdProcessor.input());
+        Serial.print(" | pid_out:");
+        if (holdProcessor.getOutput() >= 0) Serial.print("+");
+        Serial.print(holdProcessor.getOutput());
+        Serial.print(" | Kp:");
+        if (holdProcessor.getKp() >= 0) Serial.print("+");
+        Serial.print(holdProcessor.getKp());
+        Serial.print(" | Ki:");
+        if (holdProcessor.getKi() >= 0) Serial.print("+");
+        Serial.print(holdProcessor.getKi());
+        Serial.print(" | Kd:");
+        if (holdProcessor.getKd() >= 0) Serial.print("+");
+        Serial.print(holdProcessor.getKd());
+        break;
 
-  Serial.print("; jp:");
-  Serial.print(joystickPosition);
+    case Mode::TransitionToHold:
+         Serial.print(" | tp:");
+         if (chute.targetPosition() >= 0) Serial.print("+");
+         Serial.print(chute.targetPosition());
+        Serial.print(" | pid_out:");
+        if (holdProcessor.getOutput() >= 0) Serial.print("+");
+        Serial.print(holdProcessor.getOutput());
+        break;
 
-  Serial.print("; tp:");
-  Serial.print(targetPosition);
+    case Mode::Startup:
+    case Mode::AtCWLimit:
+    case Mode::AtCCWLimit:
+    case Mode::TraverseCCWToTP:
+    case Mode::TraverseCWToTP:
+    case Mode::Error:
+    default:
+        Serial.print(" | mot_spd:");
+        if (motor.speed() >= 0) Serial.print("+");
+        Serial.print(motor.speed());
+        break;
+    }
 
-  Serial.print(";cp:");
-  Serial.print(currentPosition);
-
-  Serial.print(";er:");
-  Serial.print(error);
-
-  Serial.print(";cwl:");
-  Serial.print(cwLimitHit);
-
-  Serial.print(";ccwl:");
-  Serial.print(ccwLimitHit);
-
-  Serial.print(";cm:");
-  switch (currentMode)
-  {
-  case Mode::ManualControl:
-    Serial.println("Manual");
-    break;
-  case Mode::Startup:
-    Serial.println("Startup");
-    break;
-  case Mode::TransitionToHold:
-    Serial.println("Transition");
-    break;
-  case Mode::HoldPosition:
-    Serial.println("Hold");
-    break;
-  case Mode::AtCWLimit:
-    Serial.println("AtCWLimit");
-    break;
-  case Mode::AtCCWLimit:
-    Serial.println("AtCCWLimit");
-    break;
-  case Mode::TraverseCCWToTP:
-    Serial.println("TraverseCCW");
-    break;
-  case Mode::TraverseCWToTP:
-    Serial.println("TraverseCW");
-    break;
-  case Mode::Error:
-    Serial.println("Error");
-    break;
-  default:
-    Serial.println("Unknown");
-    break;
-  }
+    Serial.println();
 }

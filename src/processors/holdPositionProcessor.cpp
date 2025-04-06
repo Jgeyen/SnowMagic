@@ -1,18 +1,23 @@
 #include "holdPositionProcessor.h"
 
-float Setpoint, Input, Output;
-QuickPID myPID(&Input, &Output, &Setpoint);
-
 HoldPositionProcessor::HoldPositionProcessor(Chute &chute, Joystick &joystick, LimitSwitch &cwLimit, LimitSwitch &ccwLimit, Motor &motor)
     : m_chute(chute),
       m_joystick(joystick),
       m_cwLimit(cwLimit),
       m_ccwLimit(ccwLimit),
-      m_motor(motor)
+      m_motor(motor),
+      m_pid(&m_input, &m_output, &m_setpoint)
 {
-    myPID.SetOutputLimits(-1, 1);
-    myPID.SetSampleTimeUs(100000);
-    myPID.SetTunings(m_Kp, m_Ki, m_Kd);
+   // Initialize PID settings
+   m_setpoint = 0.0f; 
+   m_input = 0.0f;
+   m_output = 0.0f;
+   m_pid.SetOutputLimits(-1, 1);
+   m_pid.SetSampleTimeUs(100000);
+   // TODO: Set tunings based on PIDParameters struct passed from Processor
+   // Using default (or potentially zero) tunings for now
+   m_pid.SetTunings(0.02f, 0.002f, 0.0f); // Placeholder - use passed params later
+   m_pid.SetMode(QuickPID::Control::manual); // Start in manual mode
 }
 
 void HoldPositionProcessor::update(bool verbose)
@@ -34,20 +39,21 @@ void HoldPositionProcessor::update(bool verbose)
     //   Serial.println(myPID.GetKd(), 4);
     // }
 
-    Input = getShortestAngleDifference(m_chute.targetPosition(), m_chute.currentPosition());
-    m_input = Input;
+    // Calculate error and store in member m_input
+    m_input = getShortestAngleDifference(m_chute.targetPosition(), m_chute.currentPosition());
 
     bool computePerformed;
-    computePerformed = myPID.Compute();
-    if (computePerformed && Output > 0)
+    computePerformed = m_pid.Compute(); // Use member PID controller
+    // Use member m_output
+    if (computePerformed && m_output > 0)
     {
-        Output = Output + 0.09;
+        m_output = m_output + 0.09; // Apply offset if needed (consider removing/tuning)
     }
-    if (computePerformed && Output < 0)
+    if (computePerformed && m_output < 0)
     {
-        Output = Output - 0.09;
+        m_output = m_output - 0.09; // Apply offset if needed (consider removing/tuning)
     }
-    m_motor.setMotorSpeed(Output);
+    m_motor.setMotorSpeed(m_output); // Use member PID output
 }
 double HoldPositionProcessor::getShortestAngleDifference(double target, double current)
 {
@@ -70,19 +76,37 @@ double HoldPositionProcessor::getShortestAngleDifference(double target, double c
 
 void HoldPositionProcessor::disableHoldPosition()
 {
-    myPID.SetMode(QuickPID::Control::manual);
-    Output = 0;
+    m_pid.SetMode(QuickPID::Control::manual);
+    m_output = 0;
 }
 
 void HoldPositionProcessor::transitionToHold()
 {
     m_chute.captureTargetPosition();
-    myPID.SetMode(QuickPID::Control::automatic);
+    m_pid.SetMode(QuickPID::Control::automatic);
 }
 
 float HoldPositionProcessor::input() const
 {
     return m_input;
+}
+
+// --- Getters ---
+
+float HoldPositionProcessor::getOutput() const {
+    return m_output;
+}
+
+float HoldPositionProcessor::getKp() {
+    return m_pid.GetKp();
+}
+
+float HoldPositionProcessor::getKi() {
+    return m_pid.GetKi();
+}
+
+float HoldPositionProcessor::getKd() {
+    return m_pid.GetKd();
 }
 
 // float determineDirection(float yawSetPoint, float currentYaw, LimitSwitch cwLimit, LimitSwitch ccwLimit)
