@@ -71,7 +71,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=60118",
+                "PLATFORMIO=60119",
                 "ARDUINO_MINIMA",
                 "ARDUINO_UNOR4_MINIMA",
                 "CFG_TUSB_MCU=OPT_MCU_RAXXX",

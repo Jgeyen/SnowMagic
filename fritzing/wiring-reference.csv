@@ -1,0 +1,42 @@
+status,from_component,from_pin,to_component,to_pin,notes
+proposed,24V main supply,+,Linear actuator driver,VMOT or VIN,Main high-current bus for the actuator side
+proposed,24V main supply,+,TB6600,V+,Main high-current bus for the stepper driver
+proposed,24V main supply,-,Ground,GND,Common power return
+proposed,Ground,GND,Linear actuator driver,GND,Motor driver return
+proposed,Ground,GND,TB6600,V-,Stepper driver return
+proposed,24V main supply,+,Arduino Uno R4 Minima,VIN,Official board supports 6-24V on VIN
+proposed,Ground,GND,Arduino Uno R4 Minima,GND,Board ground
+proposed,Arduino Uno R4 Minima,D2,CCW limit switch,NC,Use NC end-stop contact for fail-safe behavior
+proposed,CCW limit switch,COM,Ground,GND,Closed in normal travel, opens on hit or broken wire
+proposed,Arduino Uno R4 Minima,D3,CW limit switch,NC,Use NC end-stop contact for fail-safe behavior
+proposed,CW limit switch,COM,Ground,GND,Closed in normal travel, opens on hit or broken wire
+proposed,Arduino Uno R4 Minima,D4,Linear actuator driver,DIR,Direction signal for brushed DC driver
+proposed,Arduino Uno R4 Minima,D5,Linear actuator driver,PWM,Speed signal for brushed DC driver
+proposed,Arduino Uno R4 Minima,GND,Linear actuator driver,GND,Logic ground must be shared
+proposed,Arduino Uno R4 Minima,5V,Linear actuator driver,5V,Only if your driver exposes a logic 5V pin and expects it
+proposed,Linear actuator driver,M+,Linear actuator,motor lead 1,Swap the two motor leads later if physical direction is inverted
+proposed,Linear actuator driver,M-,Linear actuator,motor lead 2,Swap the two motor leads later if physical direction is inverted
+proposed,Arduino Uno R4 Minima,D7,TB6600,DIR+,Direction control
+proposed,Arduino Uno R4 Minima,D8,TB6600,PUL+,Step / pulse control
+proposed,Arduino Uno R4 Minima,D9,TB6600,ENA+,Optional enable line
+proposed,Ground,GND,TB6600,DIR-/PUL-/ENA-,Typical common-cathode control wiring, verify against your exact module
+proposed,TB6600,A+,NEMA 23,A+,Stepper phase A plus
+proposed,TB6600,A-,NEMA 23,A-,Stepper phase A minus
+proposed,TB6600,B+,NEMA 23,B+,Stepper phase B plus
+proposed,TB6600,B-,NEMA 23,B-,Stepper phase B minus
+reference,NEMA 23 motor,black lead,TB6600,A+,Amazon listing says black = A+
+reference,NEMA 23 motor,green lead,TB6600,A-,Amazon listing says green = A-
+reference,NEMA 23 motor,red lead,TB6600,B+,Amazon listing says red = B+
+reference,NEMA 23 motor,blue lead,TB6600,B-,Amazon listing says blue = B-
+proposed,Arduino Uno R4 Minima,5V,Industrial joystick,VCC,Joystick power
+proposed,Arduino Uno R4 Minima,GND,Industrial joystick,GND,Joystick ground
+proposed,Arduino Uno R4 Minima,A1,Industrial joystick,X-axis wiper,Primary joystick axis
+proposed,Arduino Uno R4 Minima,A2,Industrial joystick,Y-axis wiper,Optional second axis for future use
+proposed,Arduino Uno R4 Minima,D6,Industrial joystick,push switch,Joystick button input
+proposed,Arduino Uno R4 Minima,5V,ICM-20948 breakout,VIN,Adafruit board accepts 3-5V on VIN
+proposed,Arduino Uno R4 Minima,GND,ICM-20948 breakout,GND,Shared ground
+proposed,Arduino Uno R4 Minima,SDA,ICM-20948 breakout,SDA,I2C data
+proposed,Arduino Uno R4 Minima,SCL,ICM-20948 breakout,SCL,I2C clock
+optional,Monitored supply positive,+ rail,Voltage divider high side,+ input,Only add if you want supply telemetry
+optional,Voltage divider midpoint,output,Arduino Uno R4 Minima,A0,Scale divider so A0 never exceeds board limits
+optional,Voltage divider low side,GND,Ground,GND,Divider return

@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "author": "Codex",
+  "editor": "wokwi",
+  "serialMonitor": {
+    "display": "always",
+    "newline": "lf"
+  },
+  "parts": [
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": 120, "left": 250, "attrs": {} },
+    {
+      "type": "wokwi-text",
+      "id": "txt_board",
+      "top": 60,
+      "left": 230,
+      "attrs": { "text": "Physical target: Arduino Uno R4 Minima\nWokwi board proxy: Arduino Uno (pin-compatible layout only)" }
+    },
+
+    {
+      "type": "wokwi-a4988",
+      "id": "tb6600_proxy",
+      "top": 40,
+      "left": 10,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-stepper-motor",
+      "id": "nema23",
+      "top": 20,
+      "left": -170,
+      "attrs": { "size": "23", "display": "angle" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "txt_stepper",
+      "top": -20,
+      "left": -10,
+      "attrs": { "text": "TB6600 proxy via A4988\nD7=DIR, D8=STEP\nCurrent firmware does not drive this yet" }
+    },
+
+    {
+      "type": "chip-l298n",
+      "id": "actuator_driver",
+      "top": 470,
+      "left": 20,
+      "attrs": { "Vs": "24" }
+    },
+    { "type": "wokwi-gate-not", "id": "act_dir_inv", "top": 380, "left": 240, "attrs": {} },
+    { "type": "wokwi-dc-motor", "id": "linear_actuator", "top": 500, "left": -190, "attrs": {} },
+    {
+      "type": "wokwi-text",
+      "id": "txt_actuator",
+      "top": 590,
+      "left": -40,
+      "attrs": { "text": "24V linear actuator proxy\nReal hardware needs polarity-reversing driver/relays" }
+    },
+
+    {
+      "type": "wokwi-analog-joystick",
+      "id": "joystick",
+      "top": 290,
+      "left": 610,
+      "rotate": 180,
+      "attrs": { "bounce": "0" }
+    },
+
+    {
+      "type": "wokwi-slide-switch",
+      "id": "lim_ccw",
+      "top": 40,
+      "left": 590,
+      "attrs": { "bounce": "0" }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "lim_cw",
+      "top": 110,
+      "left": 590,
+      "attrs": { "bounce": "0" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "txt_limits",
+      "top": 10,
+      "left": 690,
+      "attrs": { "text": "NC limit switch behavior:\nleft = safe/closed to GND\nright = hit/open -> INPUT_PULLUP reads HIGH" }
+    },
+
+    {
+      "type": "wokwi-mpu6050",
+      "id": "imu_proxy",
+      "top": 10,
+      "left": 900,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-text",
+      "id": "txt_imu",
+      "top": 140,
+      "left": 860,
+      "attrs": { "text": "Adafruit ICM-20948 proxy only\nWokwi has MPU6050, not ICM-20948\nCurrent library will not fully simulate against this part" }
+    },
+
+    {
+      "type": "wokwi-potentiometer",
+      "id": "battery_proxy",
+      "top": 470,
+      "left": 620,
+      "rotate": 90,
+      "attrs": { "value": "683", "label": "A0 battery sense proxy" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "txt_battery",
+      "top": 560,
+      "left": 560,
+      "attrs": { "text": "Real hardware: 24V through 47k/33k divider to A0\nWokwi proxy uses potentiometer because analog power-divider simulation is limited" }
+    }
+  ],
+  "connections": [
+    [ "tb6600_proxy:1A", "nema23:B+", "green", [] ],
+    [ "tb6600_proxy:1B", "nema23:B-", "green", [] ],
+    [ "tb6600_proxy:2A", "nema23:A+", "green", [] ],
+    [ "tb6600_proxy:2B", "nema23:A-", "green", [] ],
+    [ "tb6600_proxy:RESET", "tb6600_proxy:SLEEP", "green", [] ],
+    [ "uno:5V", "tb6600_proxy:VDD", "red", [ "h-115.2", "v-163.2" ] ],
+    [ "uno:GND.1", "tb6600_proxy:GND", "black", [ "h-172.8", "v-124.8" ] ],
+    [ "uno:7", "tb6600_proxy:DIR", "green", [ "v-86.4", "h-211.2" ] ],
+    [ "uno:8", "tb6600_proxy:STEP", "orange", [ "v-96", "h-220.8" ] ],
+
+    [ "uno:4", "actuator_driver:IN1", "green", [ "v124.8", "h-182.4" ] ],
+    [ "uno:4", "act_dir_inv:IN", "green", [ "v124.8", "h28.8" ] ],
+    [ "act_dir_inv:OUT", "actuator_driver:IN2", "green", [ "h-105.6", "v48" ] ],
+    [ "uno:5", "actuator_driver:EN A", "orange", [ "v144", "h-201.6" ] ],
+    [ "uno:5V", "actuator_driver:5V", "red", [ "v220.8", "h-278.4" ] ],
+    [ "uno:GND.2", "actuator_driver:GND", "black", [ "h-182.4", "v57.6" ] ],
+    [ "actuator_driver:OUT1", "linear_actuator:A+", "green", [ "h-105.6", "v28.8" ] ],
+    [ "actuator_driver:OUT2", "linear_actuator:A-", "green", [ "h-115.2", "v38.4" ] ],
+
+    [ "uno:5V", "joystick:VCC", "red", [ "v57.6", "h307.2" ] ],
+    [ "uno:GND.3", "joystick:GND", "black", [ "h297.6", "v28.8" ] ],
+    [ "uno:A1", "joystick:HORZ", "green", [ "v144", "h240" ] ],
+    [ "uno:6", "joystick:SEL", "orange", [ "v57.6", "h326.4" ] ],
+
+    [ "lim_ccw:1", "uno:GND.1", "black", [ "h-355.2", "v105.6" ] ],
+    [ "lim_ccw:2", "uno:2", "green", [ "h-316.8", "v163.2" ] ],
+    [ "lim_cw:1", "uno:GND.1", "black", [ "h-355.2", "v48" ] ],
+    [ "lim_cw:2", "uno:3", "green", [ "h-326.4", "v96" ] ],
+
+    [ "uno:5V", "imu_proxy:VCC", "red", [ "v-67.2", "h585.6" ] ],
+    [ "uno:GND.1", "imu_proxy:GND", "black", [ "h470.4", "v-67.2" ] ],
+    [ "uno:A4", "imu_proxy:SDA", "blue", [ "v-115.2", "h566.4" ] ],
+    [ "uno:A5", "imu_proxy:SCL", "green", [ "v-124.8", "h576" ] ],
+
+    [ "uno:5V", "battery_proxy:VCC", "red", [ "v220.8", "h307.2" ] ],
+    [ "uno:GND.3", "battery_proxy:GND", "black", [ "h316.8", "v86.4" ] ],
+    [ "uno:A0", "battery_proxy:SIG", "green", [ "v182.4", "h288" ] ]
+  ],
+  "dependencies": {
+    "chip-l298n": "github:drf5n/Wokwi-Chip-L298N@1.0.5"
+  }
+}
